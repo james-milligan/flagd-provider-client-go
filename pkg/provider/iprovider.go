@@ -4,6 +4,7 @@ import (
 	gen "github.com/james-milligan/flagd-provider-client-go/schemas/protobuf/gen/v1"
 )
 
+type IProviderOption func(IProvider)
 type IProvider interface {
 	// getMetadata() metadata
 	ResolveBooleanValue(string, bool, map[string]interface{}, interface{}) (*gen.ResolveBooleanResponse, error)
