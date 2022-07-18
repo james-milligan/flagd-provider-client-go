@@ -6,45 +6,43 @@ import (
 
 	"github.com/james-milligan/flagd-provider-client-go/pkg/service"
 	gen "github.com/james-milligan/flagd-provider-client-go/schemas/protobuf/gen/v1"
+	models "github.com/open-feature/flagd/pkg/model"
+	of "github.com/open-feature/golang-sdk/pkg/openfeature"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 
-func (c *GRPCService) ResolveBoolean(flagKey string, defaultValue bool, context map[string]interface{}, options ...service.ISercviceOption) (*gen.ResolveBooleanResponse, error) {
+func (c *GRPCService) ResolveBoolean(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveBooleanResponse, error) {
 	client := c.GetInstance()
 	if client == nil {
 		return &gen.ResolveBooleanResponse{
-			Value:   defaultValue,
-			Reason:  "ERROR",
+			Reason:  models.ErrorReason,
 			Variant: "default_value",
-		}, errors.New("CONNECTION_ERROR")
+		}, errors.New("CONNECTION_ERROR") // todo: create more error codes, should these errors sit in the schema?
 	}
-	pbstruct, err := structpb.NewStruct(context)
+	contextF, err := FormatAsStructpb(context)
 	if err != nil {
 		log.Error(err)
 		return &gen.ResolveBooleanResponse{
-			Value:   defaultValue,
-			Reason:  "ERROR",
+			Reason:  models.ErrorReason,
 			Variant: "default_value",
-		}, errors.New("INTERNAL_ERROR")
+		}, errors.New(models.ParseErrorCode)
 	}
 	res, err := client.ResolveBoolean(ctx.TODO(), &gen.ResolveBooleanRequest{
 		FlagKey: flagKey,
-		Context: pbstruct,
+		Context: contextF,
 	})
 	if err != nil {
 		res, ok := ParseError(err)
 		if !ok {
 			log.Error(err)
 			return &gen.ResolveBooleanResponse{
-				Value:   defaultValue,
-				Reason:  "ERROR",
+				Reason:  models.ErrorReason,
 				Variant: "default_value",
-			}, errors.New("INTERNAL_ERROR")
+			}, errors.New(models.GeneralErrorCode)
 		}
 		return &gen.ResolveBooleanResponse{
-			Value:   defaultValue,
 			Reason:  res.Reason,
 			Variant: "default_value",
 		}, errors.New(res.ErrorCode)
@@ -52,40 +50,36 @@ func (c *GRPCService) ResolveBoolean(flagKey string, defaultValue bool, context 
 	return res, nil
 }
 
-func (c *GRPCService) ResolveString(flagKey string, defaultValue string, context map[string]interface{}, options ...service.ISercviceOption) (*gen.ResolveStringResponse, error) {
+func (c *GRPCService) ResolveString(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveStringResponse, error) {
 	client := c.GetInstance()
 	if client == nil {
 		return &gen.ResolveStringResponse{
-			Value:   defaultValue,
-			Reason:  "ERROR",
+			Reason:  models.ErrorReason,
 			Variant: "default_value",
 		}, errors.New("CONNECTION_ERROR")
 	}
-	pbstruct, err := structpb.NewStruct(context)
+	contextF, err := FormatAsStructpb(context)
 	if err != nil {
 		log.Error(err)
 		return &gen.ResolveStringResponse{
-			Value:   defaultValue,
-			Reason:  "ERROR",
+			Reason:  models.ErrorReason,
 			Variant: "default_value",
-		}, errors.New("INTERNAL_ERROR")
+		}, errors.New(models.ParseErrorCode)
 	}
 	res, err := client.ResolveString(ctx.TODO(), &gen.ResolveStringRequest{
 		FlagKey: flagKey,
-		Context: pbstruct,
+		Context: contextF,
 	})
 	if err != nil {
 		res, ok := ParseError(err)
 		if !ok {
 			log.Error(err)
 			return &gen.ResolveStringResponse{
-				Value:   defaultValue,
-				Reason:  "ERROR",
+				Reason:  models.ErrorReason,
 				Variant: "default_value",
-			}, errors.New("INTERNAL_ERROR")
+			}, errors.New(models.GeneralErrorCode)
 		}
 		return &gen.ResolveStringResponse{
-			Value:   defaultValue,
 			Reason:  res.Reason,
 			Variant: "default_value",
 		}, errors.New(res.ErrorCode)
@@ -93,40 +87,36 @@ func (c *GRPCService) ResolveString(flagKey string, defaultValue string, context
 	return res, nil
 }
 
-func (c *GRPCService) ResolveNumber(flagKey string, defaultValue float32, context map[string]interface{}, options ...service.ISercviceOption) (*gen.ResolveNumberResponse, error) {
+func (c *GRPCService) ResolveNumber(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveNumberResponse, error) {
 	client := c.GetInstance()
 	if client == nil {
 		return &gen.ResolveNumberResponse{
-			Value:   defaultValue,
-			Reason:  "ERROR",
+			Reason:  models.ErrorReason,
 			Variant: "default_value",
 		}, errors.New("CONNECTION_ERROR")
 	}
-	pbstruct, err := structpb.NewStruct(context)
+	contextF, err := FormatAsStructpb(context)
 	if err != nil {
 		log.Error(err)
 		return &gen.ResolveNumberResponse{
-			Value:   defaultValue,
-			Reason:  "ERROR",
+			Reason:  models.ErrorReason,
 			Variant: "default_value",
-		}, errors.New("INTERNAL_ERROR")
+		}, errors.New(models.ParseErrorCode)
 	}
 	res, err := client.ResolveNumber(ctx.TODO(), &gen.ResolveNumberRequest{
 		FlagKey: flagKey,
-		Context: pbstruct,
+		Context: contextF,
 	})
 	if err != nil {
 		res, ok := ParseError(err)
 		if !ok {
 			log.Error(err)
 			return &gen.ResolveNumberResponse{
-				Value:   defaultValue,
-				Reason:  "ERROR",
+				Reason:  models.ErrorReason,
 				Variant: "default_value",
-			}, errors.New("INTERNAL_ERROR")
+			}, errors.New(models.GeneralErrorCode)
 		}
 		return &gen.ResolveNumberResponse{
-			Value:   defaultValue,
 			Reason:  res.Reason,
 			Variant: "default_value",
 		}, errors.New(res.ErrorCode)
@@ -134,40 +124,36 @@ func (c *GRPCService) ResolveNumber(flagKey string, defaultValue float32, contex
 	return res, nil
 }
 
-func (c *GRPCService) ResolveObject(flagKey string, defaultValue *structpb.Struct, context map[string]interface{}, options ...service.ISercviceOption) (*gen.ResolveObjectResponse, error) {
+func (c *GRPCService) ResolveObject(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveObjectResponse, error) {
 	client := c.GetInstance()
 	if client == nil {
 		return &gen.ResolveObjectResponse{
-			Value:   defaultValue,
-			Reason:  "ERROR",
+			Reason:  models.ErrorReason,
 			Variant: "default_value",
 		}, errors.New("CONNECTION_ERROR")
 	}
-	pbstruct, err := structpb.NewStruct(context)
+	contextF, err := FormatAsStructpb(context)
 	if err != nil {
 		log.Error(err)
 		return &gen.ResolveObjectResponse{
-			Value:   defaultValue,
-			Reason:  "ERROR",
+			Reason:  models.ErrorReason,
 			Variant: "default_value",
-		}, errors.New("INTERNAL_ERROR")
+		}, errors.New(models.ParseErrorCode)
 	}
 	res, err := client.ResolveObject(ctx.TODO(), &gen.ResolveObjectRequest{
 		FlagKey: flagKey,
-		Context: pbstruct,
+		Context: contextF,
 	})
 	if err != nil {
 		res, ok := ParseError(err)
 		if !ok {
 			log.Error(err)
 			return &gen.ResolveObjectResponse{
-				Value:   defaultValue,
-				Reason:  "ERROR",
+				Reason:  models.ErrorReason,
 				Variant: "default_value",
-			}, errors.New("INTERNAL_ERROR")
+			}, errors.New(models.GeneralErrorCode)
 		}
 		return &gen.ResolveObjectResponse{
-			Value:   defaultValue,
 			Reason:  res.Reason,
 			Variant: "default_value",
 		}, errors.New(res.ErrorCode)
@@ -184,4 +170,12 @@ func ParseError(err error) (*gen.ErrorResponse, bool) {
 	}
 	res, ok := details[0].(*gen.ErrorResponse)
 	return res, ok
+}
+
+func FormatAsStructpb(evCtx of.EvaluationContext) (*structpb.Struct, error) {
+	evCtxM, ok := evCtx.(map[string]interface{})
+	if !ok {
+		return nil, errors.New("Evaluation context is not map[string]interface{}")
+	}
+	return structpb.NewStruct(evCtxM)
 }

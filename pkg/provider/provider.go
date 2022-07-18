@@ -2,34 +2,101 @@ package provider
 
 import (
 	"github.com/james-milligan/flagd-provider-client-go/pkg/service"
-	gen "github.com/james-milligan/flagd-provider-client-go/schemas/protobuf/gen/v1"
-	"google.golang.org/protobuf/types/known/structpb"
+	of "github.com/open-feature/golang-sdk/pkg/openfeature"
 )
 
 type Provider struct {
 	service service.IService
 }
 
-func (p *Provider) ResolveBooleanValue(flagKey string, defaultValue bool, context map[string]interface{}, options ...service.ISercviceOption) (*gen.ResolveBooleanResponse, error) {
-	return p.service.ResolveBoolean(flagKey, defaultValue, context, options...)
-}
-
-func (p *Provider) ResolveStringValue(flagKey string, defaultValue string, context map[string]interface{}, options ...service.ISercviceOption) (*gen.ResolveStringResponse, error) {
-	return p.service.ResolveString(flagKey, defaultValue, context, options...)
-}
-
-func (p *Provider) ResolveNumberValue(flagKey string, defaultValue float32, context map[string]interface{}, options ...service.ISercviceOption) (*gen.ResolveNumberResponse, error) {
-	return p.service.ResolveNumber(flagKey, defaultValue, context, options...)
-}
-
-func (p *Provider) ResolveObjectValue(flagKey string, defaultValue map[string]interface{}, context map[string]interface{}, options ...service.ISercviceOption) (*gen.ResolveObjectResponse, error) {
-	pbstruct, err := structpb.NewStruct(defaultValue)
-	if err != nil {
-		return &gen.ResolveObjectResponse{
-			Value:   nil,
-			Reason:  "INTERNAL ERROR",
-			Variant: "null",
-		}, err
+func (p *Provider) Metadata() of.Metadata {
+	return of.Metadata{
+		Name: "flagd",
 	}
-	return p.service.ResolveObject(flagKey, pbstruct, context, options...)
+}
+
+func (p *Provider) GetBooleanEvaluation(flagKey string, defaultValue bool, evalCtx of.EvaluationContext, options ...of.EvaluationOption) of.BoolResolutionDetail {
+	res, err := p.service.ResolveBoolean(flagKey, evalCtx)
+	if err != nil {
+		return of.BoolResolutionDetail{
+			Value: defaultValue,
+			ResolutionDetail: of.ResolutionDetail{
+				Reason:    res.Reason,
+				Value:     defaultValue,
+				Variant:   res.Variant,
+				ErrorCode: err.Error(),
+			},
+		}
+	}
+	return of.BoolResolutionDetail{
+		Value: res.Value,
+		ResolutionDetail: of.ResolutionDetail{
+			Reason:  res.Reason,
+			Value:   res.Value,
+			Variant: res.Variant,
+		},
+	}
+}
+
+func (p *Provider) GetStringEvaluation(flagKey string, defaultValue string, evalCtx of.EvaluationContext, options ...of.EvaluationOption) of.StringResolutionDetail {
+	res, err := p.service.ResolveString(flagKey, evalCtx)
+	if err != nil {
+		return of.StringResolutionDetail{
+			Value: defaultValue,
+			ResolutionDetail: of.ResolutionDetail{
+				Reason:    res.Reason,
+				Value:     defaultValue,
+				Variant:   res.Variant,
+				ErrorCode: err.Error(),
+			},
+		}
+	}
+	return of.StringResolutionDetail{
+		Value: res.Value,
+		ResolutionDetail: of.ResolutionDetail{
+			Reason:  res.Reason,
+			Value:   res.Value,
+			Variant: res.Variant,
+		},
+	}
+}
+
+func (p *Provider) GetNumberEvaluation(flagKey string, defaultValue float64, evalCtx of.EvaluationContext, options ...of.EvaluationOption) of.NumberResolutionDetail {
+	res, err := p.service.ResolveNumber(flagKey, evalCtx)
+	if err != nil {
+		return of.NumberResolutionDetail{
+			Value: defaultValue,
+			ResolutionDetail: of.ResolutionDetail{
+				Reason:    res.Reason,
+				Value:     defaultValue,
+				Variant:   res.Variant,
+				ErrorCode: err.Error(),
+			},
+		}
+	}
+	return of.NumberResolutionDetail{
+		Value: float64(res.Value), // todo - update flagd to output float64 (proto file change)
+		ResolutionDetail: of.ResolutionDetail{
+			Reason:  res.Reason,
+			Value:   res.Value,
+			Variant: res.Variant,
+		},
+	}
+}
+
+func (p *Provider) GetObjectEvaluation(flagKey string, defaultValue interface{}, evalCtx of.EvaluationContext, options ...of.EvaluationOption) of.ResolutionDetail {
+	res, err := p.service.ResolveObject(flagKey, evalCtx)
+	if err != nil {
+		return of.ResolutionDetail{
+			Reason:    res.Reason,
+			Value:     defaultValue,
+			Variant:   res.Variant,
+			ErrorCode: err.Error(),
+		}
+	}
+	return of.ResolutionDetail{
+		Reason:  res.Reason,
+		Value:   res.Value,
+		Variant: res.Variant,
+	}
 }
