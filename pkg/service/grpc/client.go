@@ -1,4 +1,4 @@
-package grpc
+package grpc_service
 
 import (
 	"fmt"
@@ -9,15 +9,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
-
-type GRPCServiceConfiguration struct {
-	Port int32
-}
-
-type GRPCService struct {
-	GRPCServiceConfiguration *GRPCServiceConfiguration
-	conn                     *grpc.ClientConn
-}
 
 func (s *GRPCService) Connect() {
 	if s.conn == nil {

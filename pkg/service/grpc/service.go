@@ -1,4 +1,4 @@
-package grpc
+package grpc_service
 
 import (
 	ctx "context"
@@ -9,12 +9,22 @@ import (
 	models "github.com/open-feature/flagd/pkg/model"
 	of "github.com/open-feature/golang-sdk/pkg/openfeature"
 	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 
-func (c *GRPCService) ResolveBoolean(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveBooleanResponse, error) {
-	client := c.GetInstance()
+type GRPCServiceConfiguration struct {
+	Port int32
+}
+
+type GRPCService struct {
+	GRPCServiceConfiguration *GRPCServiceConfiguration
+	conn                     *grpc.ClientConn
+}
+
+func (s *GRPCService) ResolveBoolean(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveBooleanResponse, error) {
+	client := s.GetInstance()
 	if client == nil {
 		return &gen.ResolveBooleanResponse{
 			Reason:  models.ErrorReason,
@@ -50,8 +60,8 @@ func (c *GRPCService) ResolveBoolean(flagKey string, context of.EvaluationContex
 	return res, nil
 }
 
-func (c *GRPCService) ResolveString(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveStringResponse, error) {
-	client := c.GetInstance()
+func (s *GRPCService) ResolveString(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveStringResponse, error) {
+	client := s.GetInstance()
 	if client == nil {
 		return &gen.ResolveStringResponse{
 			Reason:  models.ErrorReason,
@@ -87,8 +97,8 @@ func (c *GRPCService) ResolveString(flagKey string, context of.EvaluationContext
 	return res, nil
 }
 
-func (c *GRPCService) ResolveNumber(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveNumberResponse, error) {
-	client := c.GetInstance()
+func (s *GRPCService) ResolveNumber(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveNumberResponse, error) {
+	client := s.GetInstance()
 	if client == nil {
 		return &gen.ResolveNumberResponse{
 			Reason:  models.ErrorReason,
@@ -124,8 +134,8 @@ func (c *GRPCService) ResolveNumber(flagKey string, context of.EvaluationContext
 	return res, nil
 }
 
-func (c *GRPCService) ResolveObject(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveObjectResponse, error) {
-	client := c.GetInstance()
+func (s *GRPCService) ResolveObject(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveObjectResponse, error) {
+	client := s.GetInstance()
 	if client == nil {
 		return &gen.ResolveObjectResponse{
 			Reason:  models.ErrorReason,
