@@ -1,1 +1,1 @@
-# flagd-provider-client-go-
+# flagd-provider-client-go
