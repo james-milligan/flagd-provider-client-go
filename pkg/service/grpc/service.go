@@ -4,11 +4,12 @@ import (
 	ctx "context"
 	"errors"
 
+	models2 "github.com/james-milligan/flagd-provider-client-go/pkg/model"
 	"github.com/james-milligan/flagd-provider-client-go/pkg/service"
-	gen "github.com/james-milligan/flagd-provider-client-go/schemas/protobuf/gen/v1"
 	models "github.com/open-feature/flagd/pkg/model"
 	of "github.com/open-feature/golang-sdk/pkg/openfeature"
 	log "github.com/sirupsen/logrus"
+	schemaV1 "go.buf.build/grpc/go/james-milligan/flagd-schema-go/schema/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/structpb"
@@ -23,23 +24,23 @@ type GRPCService struct {
 	conn                     *grpc.ClientConn
 }
 
-func (s *GRPCService) ResolveBoolean(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveBooleanResponse, error) {
+func (s *GRPCService) ResolveBoolean(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*schemaV1.ResolveBooleanResponse, error) {
 	client := s.GetInstance()
 	if client == nil {
-		return &gen.ResolveBooleanResponse{
+		return &schemaV1.ResolveBooleanResponse{
 			Reason:  models.ErrorReason,
 			Variant: "default_value",
-		}, errors.New("CONNECTION_ERROR") // todo: create more error codes, should these errors sit in the schema?
+		}, errors.New(models2.ConnectionErrorCode)
 	}
 	contextF, err := FormatAsStructpb(context)
 	if err != nil {
 		log.Error(err)
-		return &gen.ResolveBooleanResponse{
+		return &schemaV1.ResolveBooleanResponse{
 			Reason:  models.ErrorReason,
 			Variant: "default_value",
 		}, errors.New(models.ParseErrorCode)
 	}
-	res, err := client.ResolveBoolean(ctx.TODO(), &gen.ResolveBooleanRequest{
+	res, err := client.ResolveBoolean(ctx.TODO(), &schemaV1.ResolveBooleanRequest{
 		FlagKey: flagKey,
 		Context: contextF,
 	})
@@ -47,12 +48,12 @@ func (s *GRPCService) ResolveBoolean(flagKey string, context of.EvaluationContex
 		res, ok := ParseError(err)
 		if !ok {
 			log.Error(err)
-			return &gen.ResolveBooleanResponse{
+			return &schemaV1.ResolveBooleanResponse{
 				Reason:  models.ErrorReason,
 				Variant: "default_value",
 			}, errors.New(models.GeneralErrorCode)
 		}
-		return &gen.ResolveBooleanResponse{
+		return &schemaV1.ResolveBooleanResponse{
 			Reason:  res.Reason,
 			Variant: "default_value",
 		}, errors.New(res.ErrorCode)
@@ -60,23 +61,23 @@ func (s *GRPCService) ResolveBoolean(flagKey string, context of.EvaluationContex
 	return res, nil
 }
 
-func (s *GRPCService) ResolveString(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveStringResponse, error) {
+func (s *GRPCService) ResolveString(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*schemaV1.ResolveStringResponse, error) {
 	client := s.GetInstance()
 	if client == nil {
-		return &gen.ResolveStringResponse{
+		return &schemaV1.ResolveStringResponse{
 			Reason:  models.ErrorReason,
 			Variant: "default_value",
-		}, errors.New("CONNECTION_ERROR")
+		}, errors.New("models2.ConnectionErrorCodeTION_ERROR")
 	}
 	contextF, err := FormatAsStructpb(context)
 	if err != nil {
 		log.Error(err)
-		return &gen.ResolveStringResponse{
+		return &schemaV1.ResolveStringResponse{
 			Reason:  models.ErrorReason,
 			Variant: "default_value",
 		}, errors.New(models.ParseErrorCode)
 	}
-	res, err := client.ResolveString(ctx.TODO(), &gen.ResolveStringRequest{
+	res, err := client.ResolveString(ctx.TODO(), &schemaV1.ResolveStringRequest{
 		FlagKey: flagKey,
 		Context: contextF,
 	})
@@ -84,12 +85,12 @@ func (s *GRPCService) ResolveString(flagKey string, context of.EvaluationContext
 		res, ok := ParseError(err)
 		if !ok {
 			log.Error(err)
-			return &gen.ResolveStringResponse{
+			return &schemaV1.ResolveStringResponse{
 				Reason:  models.ErrorReason,
 				Variant: "default_value",
 			}, errors.New(models.GeneralErrorCode)
 		}
-		return &gen.ResolveStringResponse{
+		return &schemaV1.ResolveStringResponse{
 			Reason:  res.Reason,
 			Variant: "default_value",
 		}, errors.New(res.ErrorCode)
@@ -97,23 +98,23 @@ func (s *GRPCService) ResolveString(flagKey string, context of.EvaluationContext
 	return res, nil
 }
 
-func (s *GRPCService) ResolveNumber(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveNumberResponse, error) {
+func (s *GRPCService) ResolveNumber(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*schemaV1.ResolveNumberResponse, error) {
 	client := s.GetInstance()
 	if client == nil {
-		return &gen.ResolveNumberResponse{
+		return &schemaV1.ResolveNumberResponse{
 			Reason:  models.ErrorReason,
 			Variant: "default_value",
-		}, errors.New("CONNECTION_ERROR")
+		}, errors.New("models2.ConnectionErrorCodeTION_ERROR")
 	}
 	contextF, err := FormatAsStructpb(context)
 	if err != nil {
 		log.Error(err)
-		return &gen.ResolveNumberResponse{
+		return &schemaV1.ResolveNumberResponse{
 			Reason:  models.ErrorReason,
 			Variant: "default_value",
 		}, errors.New(models.ParseErrorCode)
 	}
-	res, err := client.ResolveNumber(ctx.TODO(), &gen.ResolveNumberRequest{
+	res, err := client.ResolveNumber(ctx.TODO(), &schemaV1.ResolveNumberRequest{
 		FlagKey: flagKey,
 		Context: contextF,
 	})
@@ -121,12 +122,12 @@ func (s *GRPCService) ResolveNumber(flagKey string, context of.EvaluationContext
 		res, ok := ParseError(err)
 		if !ok {
 			log.Error(err)
-			return &gen.ResolveNumberResponse{
+			return &schemaV1.ResolveNumberResponse{
 				Reason:  models.ErrorReason,
 				Variant: "default_value",
 			}, errors.New(models.GeneralErrorCode)
 		}
-		return &gen.ResolveNumberResponse{
+		return &schemaV1.ResolveNumberResponse{
 			Reason:  res.Reason,
 			Variant: "default_value",
 		}, errors.New(res.ErrorCode)
@@ -134,23 +135,23 @@ func (s *GRPCService) ResolveNumber(flagKey string, context of.EvaluationContext
 	return res, nil
 }
 
-func (s *GRPCService) ResolveObject(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*gen.ResolveObjectResponse, error) {
+func (s *GRPCService) ResolveObject(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*schemaV1.ResolveObjectResponse, error) {
 	client := s.GetInstance()
 	if client == nil {
-		return &gen.ResolveObjectResponse{
+		return &schemaV1.ResolveObjectResponse{
 			Reason:  models.ErrorReason,
 			Variant: "default_value",
-		}, errors.New("CONNECTION_ERROR")
+		}, errors.New("models2.ConnectionErrorCodeTION_ERROR")
 	}
 	contextF, err := FormatAsStructpb(context)
 	if err != nil {
 		log.Error(err)
-		return &gen.ResolveObjectResponse{
+		return &schemaV1.ResolveObjectResponse{
 			Reason:  models.ErrorReason,
 			Variant: "default_value",
 		}, errors.New(models.ParseErrorCode)
 	}
-	res, err := client.ResolveObject(ctx.TODO(), &gen.ResolveObjectRequest{
+	res, err := client.ResolveObject(ctx.TODO(), &schemaV1.ResolveObjectRequest{
 		FlagKey: flagKey,
 		Context: contextF,
 	})
@@ -158,12 +159,12 @@ func (s *GRPCService) ResolveObject(flagKey string, context of.EvaluationContext
 		res, ok := ParseError(err)
 		if !ok {
 			log.Error(err)
-			return &gen.ResolveObjectResponse{
+			return &schemaV1.ResolveObjectResponse{
 				Reason:  models.ErrorReason,
 				Variant: "default_value",
 			}, errors.New(models.GeneralErrorCode)
 		}
-		return &gen.ResolveObjectResponse{
+		return &schemaV1.ResolveObjectResponse{
 			Reason:  res.Reason,
 			Variant: "default_value",
 		}, errors.New(res.ErrorCode)
@@ -171,14 +172,14 @@ func (s *GRPCService) ResolveObject(flagKey string, context of.EvaluationContext
 	return res, nil
 }
 
-func ParseError(err error) (*gen.ErrorResponse, bool) {
+func ParseError(err error) (*schemaV1.ErrorResponse, bool) {
 	st := status.Convert(err)
 	details := st.Details()
 	if len(details) != 1 {
 		log.Errorf("malformed error received by error handler, details received: %d - %v", len(details), details)
 		return nil, false
 	}
-	res, ok := details[0].(*gen.ErrorResponse)
+	res, ok := details[0].(*schemaV1.ErrorResponse)
 	return res, ok
 }
 

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	gen "github.com/james-milligan/flagd-provider-client-go/schemas/protobuf/gen/v1"
 	log "github.com/sirupsen/logrus"
+	schemaV1 "go.buf.build/grpc/go/james-milligan/flagd-schema-go/schema/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -26,10 +26,10 @@ func (s *GRPCService) Connect() {
 	}
 }
 
-func (s *GRPCService) GetInstance() gen.ServiceClient {
+func (s *GRPCService) GetInstance() schemaV1.ServiceClient {
 	s.Connect()
 	if s.conn == nil {
 		return nil
 	}
-	return gen.NewServiceClient(s.conn)
+	return schemaV1.NewServiceClient(s.conn)
 }

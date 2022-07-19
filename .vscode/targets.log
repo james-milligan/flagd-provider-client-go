@@ -7,7 +7,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 
 # This program built for i386-apple-darwin11.3.0
 
-# Make data base, printed on Tue Jul 19 10:55:32 2022
+# Make data base, printed on Tue Jul 19 11:01:24 2022
 
 # Variables
 
@@ -44,7 +44,7 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/m1/mz163zfd0bngnqz1cxznxvz00000gp/T/vscode-ipc-21aa4baf-1848-4ef9-9b4b-2d452b84c9bd.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/m1/mz163zfd0bngnqz1cxznxvz00000gp/T/vscode-ipc-8a05d0b6-6720-46e9-9a62-1a1b8c48dd14.sock
 # environment
 VSCODE_CWD = /
 # environment
@@ -174,9 +174,9 @@ VSCODE_PID = 15004
 
 # Directories
 
-# . (device 16777221, inode 4010964): 15 files, no impossibilities.
+# . (device 16777221, inode 4010964): 14 files, no impossibilities.
 
-# 15 files, no impossibilities in 1 directories.
+# 14 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -237,7 +237,7 @@ generate:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Tue Jul 19 10:55:32 2022
+# Finished Make data base on Tue Jul 19 11:01:24 2022
 
  
 make: *** No rule to make target `all'.  Stop.

@@ -1,3 +1,4 @@
+make --dry-run --always-make --keep-going --print-directory
 make: Entering directory `/Users/jamesmilligan/Documents/dynatrace/flagd-provider-client-go'
 git submodule update --init --recursive
 go install github.com/bufbuild/buf/cmd/buf@latest
