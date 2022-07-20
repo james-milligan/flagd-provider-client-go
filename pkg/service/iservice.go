@@ -2,7 +2,7 @@ package service
 
 import (
 	of "github.com/open-feature/golang-sdk/pkg/openfeature"
-	schemaV1 "go.buf.build/grpc/go/james-milligan/flagd-schema-go/schema/v1"
+	schemaV1 "go.buf.build/grpc/go/open-feature/flagd/schema/v1"
 )
 
 type IServiceOption func(IService)

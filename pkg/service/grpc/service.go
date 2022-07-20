@@ -9,7 +9,7 @@ import (
 	models "github.com/open-feature/flagd/pkg/model"
 	of "github.com/open-feature/golang-sdk/pkg/openfeature"
 	log "github.com/sirupsen/logrus"
-	schemaV1 "go.buf.build/grpc/go/james-milligan/flagd-schema-go/schema/v1"
+	schemaV1 "go.buf.build/grpc/go/open-feature/flagd/schema/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/structpb"

@@ -6,7 +6,8 @@ require (
 	github.com/open-feature/flagd v0.0.3
 	github.com/open-feature/golang-sdk v0.0.0-20220712142818-221a71bb32b8
 	github.com/sirupsen/logrus v1.8.1
-	go.buf.build/grpc/go/james-milligan/flagd-schema-go v1.3.2
+	go.buf.build/grpc/go/james-milligan/flagd v1.3.1
+	go.buf.build/grpc/go/open-feature/flagd v1.3.1
 	google.golang.org/grpc v1.48.0
 	google.golang.org/protobuf v1.28.0
 )
