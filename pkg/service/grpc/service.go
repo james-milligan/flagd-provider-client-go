@@ -10,7 +10,6 @@ import (
 	of "github.com/open-feature/golang-sdk/pkg/openfeature"
 	log "github.com/sirupsen/logrus"
 	schemaV1 "go.buf.build/grpc/go/open-feature/flagd/schema/v1"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/structpb"
 )
@@ -20,19 +19,18 @@ type GRPCServiceConfiguration struct {
 }
 
 type GRPCService struct {
-	GRPCServiceConfiguration *GRPCServiceConfiguration
-	conn                     *grpc.ClientConn
+	Client IGRPCClient
 }
 
 func (s *GRPCService) ResolveBoolean(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*schemaV1.ResolveBooleanResponse, error) {
-	client := s.GetInstance()
+	client := s.Client.GetInstance()
 	if client == nil {
 		return &schemaV1.ResolveBooleanResponse{
 			Reason:  models.ErrorReason,
 			Variant: "default_value",
 		}, errors.New(models2.ConnectionErrorCode)
 	}
-	contextF, err := FormatAsStructpb(context)
+	ctxF, err := FormatAsStructpb(context)
 	if err != nil {
 		log.Error(err)
 		return &schemaV1.ResolveBooleanResponse{
@@ -42,7 +40,7 @@ func (s *GRPCService) ResolveBoolean(flagKey string, context of.EvaluationContex
 	}
 	res, err := client.ResolveBoolean(ctx.TODO(), &schemaV1.ResolveBooleanRequest{
 		FlagKey: flagKey,
-		Context: contextF,
+		Context: ctxF,
 	})
 	if err != nil {
 		res, ok := ParseError(err)
@@ -62,12 +60,12 @@ func (s *GRPCService) ResolveBoolean(flagKey string, context of.EvaluationContex
 }
 
 func (s *GRPCService) ResolveString(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*schemaV1.ResolveStringResponse, error) {
-	client := s.GetInstance()
+	client := s.Client.GetInstance()
 	if client == nil {
 		return &schemaV1.ResolveStringResponse{
 			Reason:  models.ErrorReason,
 			Variant: "default_value",
-		}, errors.New("models2.ConnectionErrorCodeTION_ERROR")
+		}, errors.New(models2.ConnectionErrorCode)
 	}
 	contextF, err := FormatAsStructpb(context)
 	if err != nil {
@@ -99,12 +97,12 @@ func (s *GRPCService) ResolveString(flagKey string, context of.EvaluationContext
 }
 
 func (s *GRPCService) ResolveNumber(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*schemaV1.ResolveNumberResponse, error) {
-	client := s.GetInstance()
+	client := s.Client.GetInstance()
 	if client == nil {
 		return &schemaV1.ResolveNumberResponse{
 			Reason:  models.ErrorReason,
 			Variant: "default_value",
-		}, errors.New("models2.ConnectionErrorCodeTION_ERROR")
+		}, errors.New(models2.ConnectionErrorCode)
 	}
 	contextF, err := FormatAsStructpb(context)
 	if err != nil {
@@ -136,12 +134,12 @@ func (s *GRPCService) ResolveNumber(flagKey string, context of.EvaluationContext
 }
 
 func (s *GRPCService) ResolveObject(flagKey string, context of.EvaluationContext, options ...service.IServiceOption) (*schemaV1.ResolveObjectResponse, error) {
-	client := s.GetInstance()
+	client := s.Client.GetInstance()
 	if client == nil {
 		return &schemaV1.ResolveObjectResponse{
 			Reason:  models.ErrorReason,
 			Variant: "default_value",
-		}, errors.New("models2.ConnectionErrorCodeTION_ERROR")
+		}, errors.New(models2.ConnectionErrorCode)
 	}
 	contextF, err := FormatAsStructpb(context)
 	if err != nil {

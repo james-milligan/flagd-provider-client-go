@@ -10,7 +10,16 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-func (s *GRPCService) Connect() {
+type IGRPCClient interface {
+	GetInstance() schemaV1.ServiceClient
+}
+
+type GRPCClient struct {
+	conn                     *grpc.ClientConn
+	GRPCServiceConfiguration *GRPCServiceConfiguration
+}
+
+func (s *GRPCClient) Connect() {
 	if s.conn == nil {
 		conn, err := grpc.Dial(
 			fmt.Sprintf("localhost:%d", s.GRPCServiceConfiguration.Port),
@@ -26,7 +35,7 @@ func (s *GRPCService) Connect() {
 	}
 }
 
-func (s *GRPCService) GetInstance() schemaV1.ServiceClient {
+func (s *GRPCClient) GetInstance() schemaV1.ServiceClient {
 	s.Connect()
 	if s.conn == nil {
 		return nil

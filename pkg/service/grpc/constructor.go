@@ -1,24 +1,27 @@
 package grpc_service
 
-type GRPCServiceOption func(*GRPCService)
+type GRPCServiceOption func(*GRPCServiceConfiguration)
 
 func NewGRPCService(opts ...GRPCServiceOption) *GRPCService {
 	const (
 		port = 8080
 	)
+	serviceConfiguration := &GRPCServiceConfiguration{
+		Port: port,
+	}
 	svc := &GRPCService{
-		GRPCServiceConfiguration: &GRPCServiceConfiguration{
-			Port: port,
+		Client: &GRPCClient{
+			GRPCServiceConfiguration: serviceConfiguration,
 		},
 	}
 	for _, opt := range opts {
-		opt(svc)
+		opt(serviceConfiguration)
 	}
 	return svc
 }
 
 func WithPort(port int32) GRPCServiceOption {
-	return func(s *GRPCService) {
-		s.GRPCServiceConfiguration.Port = port
+	return func(s *GRPCServiceConfiguration) {
+		s.Port = port
 	}
 }
