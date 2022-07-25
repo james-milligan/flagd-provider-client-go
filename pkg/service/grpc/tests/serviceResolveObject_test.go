@@ -40,7 +40,7 @@ func TestServiceResolveObject(t *testing.T) {
 				},
 				Out: schemaV1.ResolveObjectResponse{
 					Variant: "on",
-					Reason:  "STATIC",
+					Reason:  models.StaticReason,
 				},
 			},
 			flagKey: "bool",
@@ -50,7 +50,7 @@ func TestServiceResolveObject(t *testing.T) {
 			variant:  "on",
 			valueIn:  map[string]interface{}{"food": "bars"},
 			valueOut: map[string]interface{}{"food": "bars"},
-			reason:   "STATIC",
+			reason:   models.StaticReason,
 			err:      nil,
 		},
 		{
@@ -58,7 +58,7 @@ func TestServiceResolveObject(t *testing.T) {
 			flagKey: "bool",
 			evCtx:   "not a map[string]interface{}!",
 			variant: "default_value",
-			reason:  "ERROR",
+			reason:  models.ErrorReason,
 			err:     errors.New(models.ParseErrorCode),
 		},
 		{
@@ -75,7 +75,7 @@ func TestServiceResolveObject(t *testing.T) {
 				"dog": "cat",
 			},
 			variant:   "default_value",
-			reason:    "ERROR",
+			reason:    models.ErrorReason,
 			customErr: "CUSTOM ERROR",
 			err:       errors.New("CUSTOM ERROR"),
 		},
@@ -89,7 +89,7 @@ func TestServiceResolveObject(t *testing.T) {
 			}
 			stWD, err := st.WithDetails(&schemaV1.ErrorResponse{
 				ErrorCode: test.customErr,
-				Reason:    "ERROR",
+				Reason:    models.ErrorReason,
 			})
 			if err != nil {
 				t.Error(err)

@@ -9,11 +9,7 @@ type ProviderOption func(*Provider)
 
 func NewProvider(opts ...ProviderOption) *Provider {
 	provider := &Provider{
-		service: &HTTPService.HTTPService{
-			HTTPServiceConfiguration: &HTTPService.HTTPServiceConfiguration{
-				Port: 8080,
-			},
-		},
+		service: HTTPService.NewHTTPService(),
 	}
 	for _, opt := range opts {
 		opt(provider)

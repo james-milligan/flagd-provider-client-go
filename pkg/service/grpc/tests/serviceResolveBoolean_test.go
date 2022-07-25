@@ -38,7 +38,7 @@ func TestServiceResolveBoolean(t *testing.T) {
 				Out: schemaV1.ResolveBooleanResponse{
 					Value:   true,
 					Variant: "on",
-					Reason:  "STATIC",
+					Reason:  models.StaticReason,
 				},
 			},
 			flagKey: "bool",
@@ -47,7 +47,7 @@ func TestServiceResolveBoolean(t *testing.T) {
 			},
 			value:   true,
 			variant: "on",
-			reason:  "STATIC",
+			reason:  models.StaticReason,
 			err:     nil,
 		},
 		{
@@ -56,7 +56,7 @@ func TestServiceResolveBoolean(t *testing.T) {
 			evCtx:   "not a map[string]interface{}!",
 			value:   false,
 			variant: "default_value",
-			reason:  "ERROR",
+			reason:  models.ErrorReason,
 			err:     errors.New(models.ParseErrorCode),
 		},
 		{
@@ -74,7 +74,7 @@ func TestServiceResolveBoolean(t *testing.T) {
 			},
 			value:     false,
 			variant:   "default_value",
-			reason:    "ERROR",
+			reason:    models.ErrorReason,
 			customErr: "CUSTOM ERROR",
 			err:       errors.New("CUSTOM ERROR"),
 		},
@@ -88,7 +88,7 @@ func TestServiceResolveBoolean(t *testing.T) {
 			}
 			stWD, err := st.WithDetails(&schemaV1.ErrorResponse{
 				ErrorCode: test.customErr,
-				Reason:    "ERROR",
+				Reason:    models.ErrorReason,
 			})
 			if err != nil {
 				t.Error(err)

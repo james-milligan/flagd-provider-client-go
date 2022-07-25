@@ -8,9 +8,10 @@ func NewHTTPService(opts ...HTTPServiceOption) *HTTPService {
 	)
 	svc := &HTTPService{
 		HTTPServiceConfiguration: &HTTPServiceConfiguration{
-			Port:    port,
-			Address: "localhost",
+			Port: port,
+			Host: "localhost",
 		},
+		Client: &HTTPClient{},
 	}
 	for _, opt := range opts {
 		opt(svc)
@@ -21,5 +22,11 @@ func NewHTTPService(opts ...HTTPServiceOption) *HTTPService {
 func WithPort(port int32) HTTPServiceOption {
 	return func(s *HTTPService) {
 		s.HTTPServiceConfiguration.Port = port
+	}
+}
+
+func WithHost(host string) HTTPServiceOption {
+	return func(s *HTTPService) {
+		s.HTTPServiceConfiguration.Host = host
 	}
 }
