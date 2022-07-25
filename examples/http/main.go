@@ -31,7 +31,7 @@ func main() {
 		"color": "yellow",
 	}))
 
-	fmt.Printf("\nfetching value %s, %s\n", "myBoolFlag", "TARGETING_MATCH will return on variant with value false")
+	fmt.Printf("\nfetching value %s, %s\n", "myBoolFlag", "TARGETING_MATCH will return off variant with value false")
 	fmt.Println(client.GetBooleanValueDetails("isColorYellow", false, map[string]interface{}{
 		"color": "not-yellow",
 	}))
